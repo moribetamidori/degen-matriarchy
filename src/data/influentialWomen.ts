@@ -166,4 +166,68 @@ export const influentialWomen: WomanProfile[] = [
     birthYear: 1989,
     tags: ["Musician", "Activist"],
   },
+  {
+    id: 11,
+    name: "Chien-Shiung Wu",
+    image: "/profiles/wu.png",
+    description:
+      "Chinese-American physicist who made significant contributions to nuclear physics and helped disprove the law of conservation of parity. Known as the 'First Lady of Physics' and the 'Chinese Madame Curie'.",
+    achievements: [
+      "Contributed to the Manhattan Project",
+      "Conducted the Wu Experiment, disproving the law of conservation of parity",
+      "First female president of the American Physical Society",
+      "First living scientist to have an asteroid named after her",
+    ],
+    field: "Physics",
+    birthYear: 1912,
+    tags: ["Physicist", "Scientist"],
+  },
+  {
+    id: 12,
+    name: "Lin Huiyin",
+    image: "/profiles/lin.png",
+    description:
+      "Chinese architect, architectural historian, and poet who became the first female architect in modern China. She played a crucial role in documenting and preserving traditional Chinese architecture.",
+    achievements: [
+      "First female architect in modern China",
+      "Conducted groundbreaking surveys of Chinese traditional architecture",
+      "Helped design the Chinese national emblem",
+      "Pioneer in architectural education in China",
+    ],
+    field: "Architecture",
+    birthYear: 1904,
+    tags: ["Architect", "Poet", "Historian"],
+  },
+  {
+    id: 13,
+    name: "Rosalind Franklin",
+    image: "/profiles/franklin.png",
+    description:
+      "British chemist and X-ray crystallographer whose work was central to understanding the molecular structures of DNA, RNA, viruses, coal, and graphite.",
+    achievements: [
+      "Produced the famous Photo 51 that helped reveal DNA's double helix structure",
+      "Made breakthrough discoveries about viral structures",
+      "Pioneered the use of X-ray diffraction techniques",
+      "Contributed fundamental research to the understanding of molecular structures",
+    ],
+    field: "Chemistry",
+    birthYear: 1920,
+    tags: ["Chemist", "Crystallographer"],
+  },
+  {
+    id: 14,
+    name: "Deng Yingchao",
+    image: "/profiles/deng.png",
+    description:
+      "Chinese revolutionary, politician and women's rights activist who served as the Chairwoman of the Chinese People's Political Consultative Conference from 1983 to 1988.",
+    achievements: [
+      "Led the Chinese women's suffrage movement",
+      "Helped establish the All-China Women's Federation",
+      "Served as Chairwoman of the CPPCC",
+      "Pioneered women's rights and education in China",
+    ],
+    field: "Politics",
+    birthYear: 1904,
+    tags: ["Politician", "Activist", "Revolutionary"],
+  },
 ];

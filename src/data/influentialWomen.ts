@@ -1,0 +1,123 @@
+export interface WomanProfile {
+  id: number;
+  name: string;
+  image: string;
+  description: string;
+  achievements: string[];
+  field: string;
+  birthYear: number;
+  tags: string[];
+}
+
+export const influentialWomen: WomanProfile[] = [
+  {
+    id: 1,
+    name: "Frida Kahlo",
+    image: "/profiles/frida.png",
+    description:
+      "Mexican artist known for her vibrant self-portraits and works inspired by nature and Mexican culture.",
+    achievements: [
+      "Created 143 paintings including 55 self-portraits",
+      "First Mexican artist featured at the Louvre",
+      "Inspired feminist movement in art",
+    ],
+    field: "Art",
+    birthYear: 1907,
+    tags: ["Artist"],
+  },
+  {
+    id: 2,
+    name: "Nina Simone",
+    image: "/profiles/nina.png",
+    description:
+      "American singer, songwriter, pianist, and civil rights activist who blended classical, jazz, blues, folk, and pop.",
+    achievements: [
+      "Released over 40 albums",
+      "Grammy Hall of Fame inductee",
+      "Pioneered civil rights music",
+    ],
+    field: "Music",
+    birthYear: 1933,
+    tags: ["Musician", "Activist"],
+  },
+  {
+    id: 3,
+    name: "Gertrude Ederle",
+    image: "/profiles/gertrude.png",
+    description:
+      "American competitive swimmer, Olympic champion, and former world record holder. First woman to swim across the English Channel.",
+    achievements: [
+      "First woman to swim across the English Channel (1926)",
+      "Olympic gold medalist (1924)",
+      "Set 29 national and world records",
+      "Inducted into the International Swimming Hall of Fame",
+    ],
+    field: "Sports",
+    birthYear: 1905,
+    tags: ["Athlete", "Olympic Medalist"],
+  },
+  {
+    id: 4,
+    name: "Ada Lovelace",
+    image: "/profiles/ada.png",
+    description:
+      "English mathematician and writer, known for her work on Charles Babbage's early mechanical general-purpose computer, the Analytical Engine.",
+    achievements: [
+      "Wrote the first algorithm intended to be processed by a machine",
+      "Recognized as the first computer programmer",
+      "Pioneered the concept that computers could do more than just calculations",
+      "Created the first computer program in history",
+    ],
+    field: "Computer Science",
+    birthYear: 1815,
+    tags: ["Computer Scientist", "Mathematician"],
+  },
+  {
+    id: 5,
+    name: "Grace Hopper",
+    image: "/profiles/grace.png",
+    description:
+      "American computer scientist and United States Navy rear admiral who was a pioneer of computer programming. She invented one of the first linkers and popularized the term 'debugging'.",
+    achievements: [
+      "Invented the first compiler for a computer programming language",
+      "Developed COBOL programming language",
+      "Awarded Presidential Medal of Freedom",
+      "First woman to receive Computer Sciences Man of the Year Award",
+    ],
+    field: "Computer Science",
+    birthYear: 1906,
+    tags: ["Computer Scientist", "Naval Officer"],
+  },
+  {
+    id: 6,
+    name: "Amelia Earhart",
+    image: "/profiles/amelia.png",
+    description:
+      "American aviation pioneer and author who was the first female aviator to fly solo across the Atlantic Ocean and set many other records.",
+    achievements: [
+      "First female aviator to fly solo across the Atlantic Ocean",
+      "First person to fly solo from Hawaii to the U.S. mainland",
+      "Set multiple aviation speed and distance records",
+      "Helped form The Ninety-Nines, an organization of women pilots",
+    ],
+    field: "Aviation",
+    birthYear: 1897,
+    tags: ["Aviator", "Author"],
+  },
+  {
+    id: 7,
+    name: "Marie Curie",
+    image: "/profiles/marie.png",
+    description:
+      "Polish-French physicist and chemist who conducted pioneering research on radioactivity. She was the first woman to win a Nobel Prize and the only person to win Nobel Prizes in multiple sciences.",
+    achievements: [
+      "First woman to win a Nobel Prize",
+      "Only person to win Nobel Prizes in multiple sciences (Physics and Chemistry)",
+      "Discovered the elements polonium and radium",
+      "Founded the Curie Institutes in Paris and Warsaw",
+    ],
+    field: "Physics & Chemistry",
+    birthYear: 1867,
+    tags: ["Physicist", "Chemist", "Nobel Laureate"],
+  },
+]; 

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import RotatingShape from "./RotatingShape";
 import Modal from "@/components/Modal";

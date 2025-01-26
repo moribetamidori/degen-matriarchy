@@ -1,5 +1,8 @@
+"use client";
+
 import React from 'react';
 import Shape from './Shape';
+import WomenArchive from './WomenArchive';
 
 interface ShapesCircleProps {
   radius: number;
@@ -36,8 +39,8 @@ const ShapesCircle: React.FC<ShapesCircleProps> = ({ radius, centerX, centerY })
     },
     { 
       type: 'sphere' as const,
-      label: 'Sphere',
-      content: <div className="text-[#1c41f1]">∞ Faces</div>
+      label: 'Archive of ♀',
+      content: <WomenArchive />
     }
   ];
 

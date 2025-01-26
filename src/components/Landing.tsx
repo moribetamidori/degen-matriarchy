@@ -8,6 +8,12 @@ const phrases = ["Money", "Power", "Violence"]; // Add your phrases here
 
 const Landing: React.FC = () => {
   const mountRef = useRef<HTMLDivElement | null>(null);
+  const sceneRef = useRef<{
+    scene: THREE.Scene;
+    camera: THREE.PerspectiveCamera;
+    renderer: THREE.WebGLRenderer;
+    stars: THREE.Points;
+  } | null>(null);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -16,15 +22,43 @@ const Landing: React.FC = () => {
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const renderer = new THREE.WebGLRenderer({ 
+      alpha: true,
+      antialias: true // Added for smoother rendering
+    });
+    
+    // Initial setup
+    const updateSize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
+      // Update renderer
+      renderer.setSize(width, height, false); // Added false for better performance
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Optimize for high DPI displays
+      
+      // Update camera
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      
+      // Update renderer DOM element size
+      const canvas = renderer.domElement;
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+    };
+    
+    updateSize();
     mount.appendChild(renderer.domElement);
 
-    // Starfield
+    // Starfield setup
     const starGeometry = new THREE.BufferGeometry();
-    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff });
+    const starMaterial = new THREE.PointsMaterial({ 
+      color: 0xffffff,
+      size: 0.7, // Adjusted star size
+      sizeAttenuation: true // Stars get smaller with distance
+    });
+    
     const starVertices = [];
-    for (let i = 0; i < 10000; i++) {
+    for (let i = 0; i < 15000; i++) { // Increased star count
       const x = THREE.MathUtils.randFloatSpread(2000);
       const y = THREE.MathUtils.randFloatSpread(2000);
       const z = THREE.MathUtils.randFloatSpread(2000);
@@ -34,12 +68,30 @@ const Landing: React.FC = () => {
     const stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
 
-    // Galaxy effect (optional)
-    // Add additional objects or effects here
-
     camera.position.z = 1;
 
+    // Store references
+    sceneRef.current = { scene, camera, renderer, stars };
+
+    // Debounced resize handler to prevent too many updates
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (sceneRef.current) {
+          updateSize();
+          // Force one render after resize
+          renderer.render(scene, camera);
+        }
+      }, 100);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Animation loop
     const animate = () => {
+      if (!sceneRef.current) return;
+      
       requestAnimationFrame(animate);
       stars.rotation.x += 0.0005;
       stars.rotation.y += 0.0005;
@@ -48,15 +100,33 @@ const Landing: React.FC = () => {
 
     animate();
 
-    // Cleanup on component unmount
+    // Cleanup
     return () => {
+      clearTimeout(resizeTimeout);
+      window.removeEventListener('resize', handleResize);
       mount.removeChild(renderer.domElement);
+      // Dispose of Three.js resources
+      starGeometry.dispose();
+      starMaterial.dispose();
+      renderer.dispose();
+      sceneRef.current = null;
     };
   }, []);
 
   return (
     <div>
-      <div ref={mountRef} style={{ position: "absolute", top: 0, left: 0, zIndex: -1 }} />
+      <div 
+        ref={mountRef} 
+        style={{ 
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          zIndex: -1,
+          overflow: "hidden"
+        }} 
+      />
       <div className="moving-band top-band">
         <div className="scroll">
           {[...Array(10)].map((_, i) => (

@@ -6,15 +6,15 @@ import { WomanProfile, influentialWomen } from "../data/influentialWomen";
 
 const WomenArchive: React.FC = () => {
   const [selectedWoman, setSelectedWoman] = useState<WomanProfile | null>(null);
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // Get unique tags from all profiles
   const allTags = useMemo(() => {
     const tags = new Set<string>();
-    influentialWomen.forEach(woman => {
-      woman.tags.forEach(tag => tags.add(tag));
+    influentialWomen.forEach((woman) => {
+      woman.tags.forEach((tag) => tags.add(tag));
     });
     return Array.from(tags);
   }, []);
@@ -22,18 +22,18 @@ const WomenArchive: React.FC = () => {
   // Filter and sort women
   const filteredWomen = useMemo(() => {
     let filtered = [...influentialWomen];
-    
+
     // Apply tag filters
     if (selectedTags.length > 0) {
-      filtered = filtered.filter(woman =>
-        selectedTags.some(tag => woman.tags.includes(tag))
+      filtered = filtered.filter((woman) =>
+        selectedTags.some((tag) => woman.tags.includes(tag))
       );
     }
 
     // Apply sorting
     filtered.sort((a, b) => {
-      return sortOrder === 'asc' 
-        ? a.birthYear - b.birthYear 
+      return sortOrder === "asc"
+        ? a.birthYear - b.birthYear
         : b.birthYear - a.birthYear;
     });
 
@@ -44,9 +44,9 @@ const WomenArchive: React.FC = () => {
     <div className="absolute right-0 top-12 bg-black border border-[#1c41f1] rounded-lg p-4 z-10 w-64">
       <div className="mb-4">
         <h3 className="text-[#1c41f1] font-bold mb-2">Sort by Year</h3>
-        <select 
+        <select
           value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
+          onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
           className="bg-black text-[#1c41f1] border border-[#1c41f1] rounded p-1 w-full"
         >
           <option value="desc">Newest to Oldest</option>
@@ -111,41 +111,43 @@ const WomenArchive: React.FC = () => {
         <div className="h-full flex flex-col">
           <div className="flex items-center justify-between mb-4">
             <div className="flex gap-2 overflow-x-auto flex-1 mr-4">
-              {allTags.map(tag => (
+              {allTags.map((tag) => (
                 <button
                   key={tag}
-                  onClick={() => setSelectedTags(prev => 
-                    prev.includes(tag) 
-                      ? prev.filter(t => t !== tag)
-                      : [...prev, tag]
-                  )}
+                  onClick={() =>
+                    setSelectedTags((prev) =>
+                      prev.includes(tag)
+                        ? prev.filter((t) => t !== tag)
+                        : [...prev, tag]
+                    )
+                  }
                   className={`px-3 py-1 rounded-full text-sm whitespace-nowrap ${
                     selectedTags.includes(tag)
-                      ? 'bg-[#1c41f1] text-black'
-                      : 'border border-[#1c41f1] text-[#1c41f1]'
+                      ? "bg-[#1c41f1] text-black"
+                      : "border border-[#1c41f1] text-[#1c41f1]"
                   }`}
                 >
                   {tag}
                 </button>
               ))}
             </div>
-            
+
             <div className="relative">
               <button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
                 className="text-[#1c41f1] hover:opacity-75"
               >
-                <svg 
-                  className="w-6 h-6" 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" 
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
                   />
                 </svg>
               </button>
@@ -171,7 +173,9 @@ const WomenArchive: React.FC = () => {
                         className="w-full h-full object-cover rounded-lg opacity-80"
                       />
                     </div>
-                    <p className="font-medium text-[#1c41f1] font-mono text-sm">{woman.name}</p>
+                    <p className="font-medium text-[#1c41f1] font-mono text-sm h-10 overflow-hidden line-clamp-2">
+                      {woman.name}
+                    </p>
                   </div>
                 </button>
               ))}

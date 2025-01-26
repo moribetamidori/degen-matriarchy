@@ -122,7 +122,7 @@ export const influentialWomen: WomanProfile[] = [
   },
   {
     id: 8,
-    name: "Idoia Riaño",
+    name: "Idoia López Riaño",
     image: "/profiles/idoia.png",
     description:
       "Former member of the Basque separatist group ETA, known for her involvement in several high-profile attacks during the 1980s.",

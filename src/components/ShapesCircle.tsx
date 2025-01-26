@@ -3,6 +3,7 @@
 import React from 'react';
 import Shape from './Shape';
 import WomenArchive from './WomenArchive';
+import MusicPlayer from './MusicPlayer';
 
 interface ShapesCircleProps {
   radius: number;
@@ -36,6 +37,11 @@ const ShapesCircle: React.FC<ShapesCircleProps> = ({ radius, centerX, centerY })
       type: 'icosahedron' as const,
       label: 'Icosahedron',
       content: <div className="text-[#1c41f1]">20 Faces</div>
+    },
+    { 
+      type: 'icosahedron' as const,
+      label: 'Music Vibes',
+      content: <MusicPlayer />
     },
     { 
       type: 'sphere' as const,

@@ -120,4 +120,50 @@ export const influentialWomen: WomanProfile[] = [
     birthYear: 1867,
     tags: ["Physicist", "Chemist", "Nobel Laureate"],
   },
-]; 
+  {
+    id: 8,
+    name: "Idoia Riaño",
+    image: "/profiles/idoia.png",
+    description:
+      "Former member of the Basque separatist group ETA, known for her involvement in several high-profile attacks during the 1980s.",
+    achievements: [
+      "Involved in ETA's activities during the 1980s",
+      "Known for her role in high-profile attacks",
+      "Killed 23 people",
+    ],
+    field: "Activism",
+    birthYear: 1964,
+    tags: ["Activist", "Killer"],
+  },
+  {
+    id: 9,
+    name: "Diane Hendricks",
+    image: "/profiles/diane.png",
+    description:
+      "American businesswoman and film producer, known for being the chairperson of ABC Supply, one of the largest wholesale distributors of roofing, siding, and windows in America.",
+    achievements: [
+      "Co-founded ABC Supply in 1982",
+      "Named one of Forbes' richest self-made women",
+      "Philanthropist supporting education and economic development",
+    ],
+    field: "Business",
+    birthYear: 1947,
+    tags: ["Businesswoman"],
+  },
+  {
+    id: 10,
+    name: "Taylor Swift",
+    image: "/profiles/taylor.png",
+    description:
+      "American singer-songwriter known for her narrative songwriting and versatile musical style, which has earned her numerous awards and a global fanbase.",
+    achievements: [
+      "Won 11 Grammy Awards",
+      "First female artist to win Album of the Year three times",
+      "Advocate for artists' rights and gender equality",
+      "Sold over 200 million records worldwide",
+    ],
+    field: "Music",
+    birthYear: 1989,
+    tags: ["Musician", "Activist"],
+  },
+];

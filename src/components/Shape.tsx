@@ -3,16 +3,40 @@
 import React, { useState } from "react";
 import RotatingShape from "./RotatingShape";
 import Modal from "@/components/Modal";
+import PostItModal from "@/components/PostItModal";
 
 interface ShapeProps {
-  type: 'tetrahedron' | 'cube' | 'octahedron' | 'dodecahedron' | 'icosahedron' | 'sphere';
+  type:
+    | "tetrahedron"
+    | "cube"
+    | "octahedron"
+    | "dodecahedron"
+    | "icosahedron"
+    | "sphere";
   position: { x: number; y: number; z: number };
   label: string;
-  content: React.ReactNode;
+  content: React.ReactElement<{ isOpen: boolean; onClose: () => void }>;
 }
 
 const Shape: React.FC<ShapeProps> = ({ type, position, label, content }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const renderContent = () => {
+    // Special handling for PostItModal
+    if (React.isValidElement(content) && content.type === PostItModal) {
+      return React.cloneElement(content, {
+        isOpen: isModalOpen,
+        onClose: () => setIsModalOpen(false),
+      });
+    }
+
+    // Regular modal content
+    return (
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        {content}
+      </Modal>
+    );
+  };
 
   return (
     <div className="shape-container">
@@ -32,9 +56,7 @@ const Shape: React.FC<ShapeProps> = ({ type, position, label, content }) => {
         </div>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        {content}
-      </Modal>
+      {renderContent()}
     </div>
   );
 };

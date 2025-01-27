@@ -1,9 +1,10 @@
 "use client";
 
-import React from 'react';
-import Shape from './Shape';
-import WomenArchive from './WomenArchive';
-import MusicPlayer from './MusicPlayer';
+import React from "react";
+import Shape from "./Shape";
+import WomenArchive from "./WomenArchive";
+import MusicPlayer from "./MusicPlayer";
+import PostItModal from "@/components/PostItModal";
 
 interface ShapesCircleProps {
   radius: number;
@@ -11,43 +12,47 @@ interface ShapesCircleProps {
   centerY: number;
 }
 
-const ShapesCircle: React.FC<ShapesCircleProps> = ({ radius, centerX, centerY }) => {
+const ShapesCircle: React.FC<ShapesCircleProps> = ({
+  radius,
+  centerX,
+  centerY,
+}) => {
   const shapes = [
-    { 
-      type: 'tetrahedron' as const,
-      label: 'Tetrahedron',
-      content: <div className="text-[#1c41f1]">4 Faces</div>
+    {
+      type: "tetrahedron" as const,
+      label: "Tetrahedron",
+      content: <div className="text-[#1c41f1]">4 Faces</div>,
     },
-    { 
-      type: 'cube' as const,
-      label: 'Cube',
-      content: <div className="text-[#1c41f1]">6 Faces</div>
+    {
+      type: "cube" as const,
+      label: "Cube",
+      content: <div className="text-[#1c41f1]">6 Faces</div>,
     },
-    { 
-      type: 'octahedron' as const,
-      label: 'Octahedron',
-      content: <div className="text-[#1c41f1]">8 Faces</div>
+    {
+      type: "octahedron" as const,
+      label: "Octahedron",
+      content: <div className="text-[#1c41f1]">8 Faces</div>,
     },
-    { 
-      type: 'dodecahedron' as const,
-      label: 'Dodecahedron',
-      content: <div className="text-[#1c41f1]">12 Faces</div>
+    {
+      type: "dodecahedron" as const,
+      label: "Dodecahedron",
+      content: <div className="text-[#1c41f1]">12 Faces</div>,
     },
-    { 
-      type: 'icosahedron' as const,
-      label: 'Icosahedron',
-      content: <div className="text-[#1c41f1]">20 Faces</div>
+    {
+      type: "icosahedron" as const,
+      label: "Post-Its",
+      content: <PostItModal isOpen={true} onClose={() => {}} />,
     },
-    { 
-      type: 'icosahedron' as const,
-      label: 'Music Vibes',
-      content: <MusicPlayer />
+    {
+      type: "icosahedron" as const,
+      label: "Music Vibes",
+      content: <MusicPlayer />,
     },
-    { 
-      type: 'sphere' as const,
-      label: 'Archive of ♀',
-      content: <WomenArchive />
-    }
+    {
+      type: "sphere" as const,
+      label: "Archive of ♀",
+      content: <WomenArchive />,
+    },
   ];
 
   return (
@@ -71,4 +76,4 @@ const ShapesCircle: React.FC<ShapesCircleProps> = ({ radius, centerX, centerY })
   );
 };
 
-export default ShapesCircle; 
+export default ShapesCircle;

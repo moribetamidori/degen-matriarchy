@@ -1,9 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PostItNote from "./PostItNote";
+import { Database } from "../../supabase/database.types";
+import * as postItService from "@/services/postItService";
+
+type Page = Database["public"]["Tables"]["pages"]["Row"];
+type Note = Database["public"]["Tables"]["post_it_notes"]["Row"];
 
 interface PostItModalProps {
   isOpen: boolean;
   onClose: () => void;
+  userId: string;
 }
 
 const COLORS = [
@@ -15,93 +21,136 @@ const COLORS = [
   "#f1f11c", // yellow
 ];
 
-interface Note {
-  id: string;
-  text: string;
-  position: { x: number; y: number };
-  color: string;
-}
-
-interface Page {
-  id: string;
-  notes: Note[];
-}
-
-const PostItModal: React.FC<PostItModalProps> = ({ isOpen, onClose }) => {
-  const [pages, setPages] = useState<Page[]>([
-    { id: '1', notes: [] }
-  ]);
+const PostItModal: React.FC<PostItModalProps> = ({
+  isOpen,
+  onClose,
+  userId,
+}) => {
+  const [pages, setPages] = useState<Page[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [inputText, setInputText] = useState("");
   const [isInputVisible, setIsInputVisible] = useState(false);
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Load initial data
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const pagesData = await postItService.getPages();
+
+        if (pagesData.length === 0) {
+          // Create initial page if none exists
+          const newPage = await postItService.createPage(1);
+          setPages([newPage]);
+          setNotes([]);
+        } else {
+          setPages(pagesData);
+          const notesData = await postItService.getNotesByPage(pagesData[0].id);
+          setNotes(notesData);
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    if (isOpen) {
+      loadData();
+    }
+  }, [isOpen]);
+
+  // Load notes when changing pages
+  useEffect(() => {
+    const loadPageNotes = async () => {
+      if (!pages[currentPageIndex]) return;
+
+      try {
+        const notesData = await postItService.getNotesByPage(
+          pages[currentPageIndex].id
+        );
+        setNotes(notesData);
+      } catch (error) {
+        console.error("Error loading notes:", error);
+      }
+    };
+
+    loadPageNotes();
+  }, [currentPageIndex, pages]);
+
   const handleClose = () => {
-    setPages([{ id: '1', notes: [] }]);
+    setPages([]);
+    setNotes([]);
     setCurrentPageIndex(0);
     setInputText("");
     onClose();
   };
 
-  const addNote = () => {
+  const addNote = async () => {
     if (!inputText.trim()) return;
 
     const containerRect = containerRef.current?.getBoundingClientRect();
     if (!containerRect) return;
 
-    // Calculate visible area (accounting for padding and other elements)
-    const maxWidth = containerRect.width - 250;  // 200px for note width + 50px buffer
-    const maxHeight = containerRect.height - 250; // 200px for note height + 50px buffer
+    const maxWidth = containerRect.width - 250;
+    const maxHeight = containerRect.height - 250;
 
-    const newNote: Note = {
-      id: Date.now().toString(),
-      text: inputText,
-      position: {
-        x: Math.random() * maxWidth + 100, // Add offset to avoid left edge
-        y: Math.random() * maxHeight + 100, // Add offset to avoid top edge
-      },
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    };
+    try {
+      const newNote = await postItService.createNote({
+        text: inputText,
+        position_x: Math.random() * maxWidth + 100,
+        position_y: Math.random() * maxHeight + 100,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        page_id: pages[currentPageIndex].id,
+        user_id: userId,
+      });
 
-    setPages(prevPages => {
-      const newPages = [...prevPages];
-      newPages[currentPageIndex] = {
-        ...newPages[currentPageIndex],
-        notes: [...newPages[currentPageIndex].notes, newNote]
-      };
-      return newPages;
-    });
-    setInputText("");
-    setIsInputVisible(false); // Close input after adding note
+      setNotes((prevNotes) => [...prevNotes, newNote]);
+      setInputText("");
+      setIsInputVisible(false);
+    } catch (error) {
+      console.error("Error creating note:", error);
+    }
   };
 
-  const updateNotePosition = (
+  const updateNotePosition = async (
     id: string,
     newPosition: { x: number; y: number }
   ) => {
-    setPages(prevPages => {
-      const newPages = [...prevPages];
-      newPages[currentPageIndex] = {
-        ...newPages[currentPageIndex],
-        notes: newPages[currentPageIndex].notes.map(note =>
-          note.id === id ? { ...note, position: newPosition } : note
+    try {
+      await postItService.updateNotePosition(id, newPosition.x, newPosition.y);
+      setNotes((prevNotes) =>
+        prevNotes.map((note) =>
+          note.id === id
+            ? { ...note, position_x: newPosition.x, position_y: newPosition.y }
+            : note
         )
-      };
-      return newPages;
-    });
+      );
+    } catch (error) {
+      console.error("Error updating note position:", error);
+    }
   };
 
-  const addNewPage = () => {
-    setPages(prev => [...prev, { id: Date.now().toString(), notes: [] }]);
-    setCurrentPageIndex(prev => prev + 1);
+  const addNewPage = async () => {
+    try {
+      const newPage = await postItService.createPage(pages.length + 1);
+      setPages((prev) => [...prev, newPage]);
+      setCurrentPageIndex((prev) => prev + 1);
+    } catch (error) {
+      console.error("Error creating page:", error);
+    }
   };
+
+  // Filter notes for current page
+  const currentPageNotes = notes.filter(
+    (note) => note.page_id === pages[currentPageIndex]?.id
+  );
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 z-50 overflow-auto">
-      <div 
+      <div
         ref={containerRef}
         className="relative min-h-screen min-w-screen w-full h-full p-4"
       >
@@ -154,9 +203,9 @@ const PostItModal: React.FC<PostItModalProps> = ({ isOpen, onClose }) => {
               key={page.id}
               onClick={() => setCurrentPageIndex(index)}
               className={`w-8 h-8 rounded-full ${
-                currentPageIndex === index 
-                  ? 'bg-[#1c41f1] text-white' 
-                  : 'bg-gray-200'
+                currentPageIndex === index
+                  ? "bg-[#1c41f1] text-white"
+                  : "bg-gray-200"
               }`}
             >
               {index + 1}
@@ -170,11 +219,11 @@ const PostItModal: React.FC<PostItModalProps> = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {pages[currentPageIndex].notes.map((note) => (
+        {currentPageNotes.map((note) => (
           <PostItNote
             key={note.id}
             text={note.text}
-            position={note.position}
+            position={{ x: note.position_x, y: note.position_y }}
             color={note.color}
             onPositionChange={(newPosition) =>
               updateNotePosition(note.id, newPosition)

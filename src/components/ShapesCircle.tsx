@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Shape from "./Shape";
 import WomenArchive from "./WomenArchive";
 import MusicPlayer from "./MusicPlayer";
 import PostItModal from "@/components/PostItModal";
+import LoginModal from "@/components/LoginModal";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ShapesCircleProps {
   radius: number;
@@ -17,11 +19,20 @@ const ShapesCircle: React.FC<ShapesCircleProps> = ({
   centerX,
   centerY,
 }) => {
+  const { user } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   const shapes = [
     {
       type: "tetrahedron" as const,
-      label: "Tetrahedron",
-      content: <div className="text-[#1c41f1]">4 Faces</div>,
+      label: user ? "Logged in" : "Login",
+      content: (
+        <LoginModal 
+          isOpen={isLoginModalOpen} 
+          onClose={() => setIsLoginModalOpen(false)} 
+        />
+      ),
+      onClick: () => setIsLoginModalOpen(true),
     },
     {
       type: "cube" as const,
@@ -41,7 +52,13 @@ const ShapesCircle: React.FC<ShapesCircleProps> = ({
     {
       type: "icosahedron" as const,
       label: "Post-Its",
-      content: <PostItModal isOpen={true} onClose={() => {}} />,
+      content: (
+        <PostItModal 
+          isOpen={true} 
+          onClose={() => {}} 
+          userId={user?.id ?? "defaultUserId"} 
+        />
+      ),
     },
     {
       type: "icosahedron" as const,
@@ -69,6 +86,7 @@ const ShapesCircle: React.FC<ShapesCircleProps> = ({
             position={{ x, y, z: 0 }}
             label={shape.label}
             content={shape.content}
+            onClick={shape.onClick}
           />
         );
       })}

@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import RotatingShape from "./RotatingShape";
 import Modal from "@/components/Modal";
-import PostItModal from "@/components/PostItModal";
+import PostItModal from "@/components/PostItModal"
+import LoginModal from "@/components/LoginModal";
 
 interface ShapeProps {
   type:
@@ -16,6 +17,7 @@ interface ShapeProps {
   position: { x: number; y: number; z: number };
   label: string;
   content: React.ReactElement<{ isOpen: boolean; onClose: () => void }>;
+  onClick?: () => void;
 }
 
 const Shape: React.FC<ShapeProps> = ({ type, position, label, content }) => {
@@ -24,6 +26,14 @@ const Shape: React.FC<ShapeProps> = ({ type, position, label, content }) => {
   const renderContent = () => {
     // Special handling for PostItModal
     if (React.isValidElement(content) && content.type === PostItModal) {
+      return React.cloneElement(content, {
+        isOpen: isModalOpen,
+        onClose: () => setIsModalOpen(false),
+      });
+    }
+
+    // Special handling for LoginModal
+    if (React.isValidElement(content) && content.type === LoginModal) {
       return React.cloneElement(content, {
         isOpen: isModalOpen,
         onClose: () => setIsModalOpen(false),

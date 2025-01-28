@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-interface PostItProps {
+interface PostItNoteProps {
   text: string;
   position: { x: number; y: number };
   color: string;
-  onPositionChange: (position: { x: number; y: number }) => void;
+  onPositionChange: (newPosition: { x: number; y: number }) => void;
+  containerRef: React.RefObject<HTMLDivElement>;
 }
 
-const PostItNote: React.FC<PostItProps> = ({ text, position, color, onPositionChange }) => {
+const PostItNote: React.FC<PostItNoteProps> = ({
+  text,
+  position,
+  color,
+  onPositionChange,
+}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 

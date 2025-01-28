@@ -24,8 +24,8 @@ jobs:
 
       - name: Link Supabase Project
         run: supabase link --project-ref $SUPABASE_PROJECT_ID
-        working-directory: packages/supabase
+        working-directory: supabase
 
       - name: Push Database Changes
         run: supabase db push
-        working-directory: packages/supabase
+        working-directory: supabase

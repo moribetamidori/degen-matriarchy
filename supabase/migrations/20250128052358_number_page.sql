@@ -18,15 +18,18 @@ create policy "Enable update access for all users"
   on public.pages for update
   using (true);
 
--- Add RLS policies for users table
-create policy "Enable read access for all users"
+create policy "Users can read their own user data"
   on public.users for select
-  using (true);
+  using (auth.uid() = id);
 
-create policy "Enable insert access for all users"
-  on public.users for insert
-  with check (true);
-
-create policy "Enable update access for all users"
+create policy "Users can update their own user data"
   on public.users for update
-  using (true);
+  using (auth.uid() = id);
+
+create policy "Users can delete their own user data"
+  on public.users for delete
+  using (auth.uid() = id);
+
+create policy "Users can insert their own user data"
+  on public.users for insert
+  with check (auth.uid() = id);

@@ -31,6 +31,7 @@ const PostItModal: React.FC<PostItModalProps> = ({
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [inputText, setInputText] = useState("");
   const [isInputVisible, setIsInputVisible] = useState(false);
+  const [showLoginMessage, setShowLoginMessage] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -147,6 +148,7 @@ const PostItModal: React.FC<PostItModalProps> = ({
   );
 
   if (!isOpen) return null;
+  console.log("u", userId);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 z-50 overflow-auto">
@@ -167,7 +169,7 @@ const PostItModal: React.FC<PostItModalProps> = ({
           {!isInputVisible ? (
             <button
               onClick={() => setIsInputVisible(true)}
-              className="px-4 py-2 border border-[#1c41f1] text-[#1c41f1] rounded hover:bg-[#1c41f1] hover:text-black transition-all duration-300"
+              className="px-4 py-2 border border-[#1c41f1] text-[#1c41f1] rounded hover:bg-[#1c41f1] hover:text-black"
             >
               +
             </button>
@@ -181,23 +183,37 @@ const PostItModal: React.FC<PostItModalProps> = ({
                 placeholder="Type your note..."
                 autoFocus
               />
-              <button
-                onClick={addNote}
-                className="px-4 py-2 border border-[#1c41f1] text-[#1c41f1] rounded hover:bg-[#1c41f1] hover:text-black whitespace-nowrap"
-              >
-                Add Note
-              </button>
+              {userId !== "defaultUserId" ? (
+                <button
+                  onClick={addNote}
+                  className="px-4 py-2 border border-[#1c41f1] text-[#1c41f1] rounded hover:bg-[#1c41f1] hover:text-black"
+                >
+                  Add Note
+                </button>
+              ) : (
+                <span
+                  className="px-4 py-2 border border-red-500 text-red-500 rounded cursor-pointer"
+                  onClick={() => setShowLoginMessage((prev) => !prev)}
+                >
+                  Login to add note
+                </span>
+              )}
               <button
                 onClick={() => setIsInputVisible(false)}
                 className="px-4 py-2 border border-[#1c41f1] text-[#1c41f1] rounded hover:bg-[#1c41f1] hover:text-black"
               >
                 Cancel
               </button>
+              {showLoginMessage && (
+                <span className="text-sm text-red-500 ml-2 mt-3">
+                  Close this modal and find the login button on one of the shapes rotating at the main page.
+                </span>
+              )}
             </div>
           )}
         </div>
 
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-white p-2 rounded-lg shadow-lg">
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 border border-[#1c41f1] p-2 rounded-lg shadow-lg">
           {pages.map((page, index) => (
             <button
               key={page.id}
@@ -205,7 +221,7 @@ const PostItModal: React.FC<PostItModalProps> = ({
               className={`w-8 h-8 rounded-full ${
                 currentPageIndex === index
                   ? "bg-[#1c41f1] text-white"
-                  : "bg-gray-200"
+                  : "border border-[#1c41f1] text-[#1c41f1]"
               }`}
             >
               {index + 1}
@@ -213,7 +229,7 @@ const PostItModal: React.FC<PostItModalProps> = ({
           ))}
           <button
             onClick={addNewPage}
-            className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300"
+            className="w-8 h-8 rounded-full border border-[#1c41f1] text-[#1c41f1] hover:bg-[#1c41f1] hover:text-white transition-all duration-300"
           >
             +
           </button>

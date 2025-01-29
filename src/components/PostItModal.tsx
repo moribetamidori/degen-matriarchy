@@ -222,6 +222,7 @@ const PostItModal: React.FC<PostItModalProps> = ({
         {currentPageNotes.map((note) => (
           <PostItNote
             key={note.id}
+            id={note.id}
             text={note.text}
             position={{ x: note.position_x, y: note.position_y }}
             color={note.color}
@@ -229,6 +230,14 @@ const PostItModal: React.FC<PostItModalProps> = ({
               updateNotePosition(note.id, newPosition)
             }
             containerRef={containerRef as React.RefObject<HTMLDivElement>}
+            canEdit={note.user_id === userId}
+            onTextUpdate={(newText) => {
+              setNotes((prevNotes) =>
+                prevNotes.map((n) =>
+                  n.id === note.id ? { ...n, text: newText } : n
+                )
+              );
+            }}
           />
         ))}
       </div>

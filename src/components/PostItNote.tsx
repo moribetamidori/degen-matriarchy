@@ -1,21 +1,31 @@
 import React, { useState, useEffect, useCallback } from 'react';
-
+import * as postItService from "@/services/postItService";
+import { PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
 interface PostItNoteProps {
+  id: string;
   text: string;
   position: { x: number; y: number };
   color: string;
   onPositionChange: (newPosition: { x: number; y: number }) => void;
   containerRef: React.RefObject<HTMLDivElement>;
+  canEdit: boolean;
+  onTextUpdate?: (newText: string) => void;
 }
 
 const PostItNote: React.FC<PostItNoteProps> = ({
+  id,
   text,
   position,
   color,
   onPositionChange,
+  canEdit,
+  onTextUpdate,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState(text);
+  const [showUpdateIcon, setShowUpdateIcon] = useState(false);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -50,6 +60,22 @@ const PostItNote: React.FC<PostItNoteProps> = ({
     };
   }, [isDragging, handleMouseMove]);
 
+  const handleEdit = async () => {
+    if (isEditing) {
+      try {
+        await postItService.updateNoteText(id, editedText);
+        onTextUpdate?.(editedText);
+        setIsEditing(false);
+        setShowUpdateIcon(false);
+      } catch (error) {
+        console.error('Error updating note:', error);
+      }
+    } else {
+      setIsEditing(true);
+      setShowUpdateIcon(true);
+    }
+  };
+
   return (
     <div
       className="absolute cursor-move"
@@ -67,7 +93,20 @@ const PostItNote: React.FC<PostItNoteProps> = ({
           border: `2px solid ${color}`,
         }}
       >
-        <div className="p-4 font-mono text-sm text-white">{text}</div>
+        {canEdit && (
+          <button
+            className="absolute -top-6 -right-4 m-2 text-white p-1 rounded-full bg-[#1c41f1] bg-opacity-40 border border-[#1c41f1]"
+            onClick={handleEdit}
+          >
+            {showUpdateIcon ? <CheckIcon className="size-6" /> : <PencilIcon className="size-6" />}
+          </button>
+        )}
+        <textarea
+          className="p-4 font-mono text-sm text-white w-full h-full bg-transparent"
+          value={isEditing ? editedText : text}
+          onChange={(e) => setEditedText(e.target.value)}
+          readOnly={!isEditing}
+        />
         <div
           className="absolute -bottom-4 -right-4 w-8 h-8"
           style={{

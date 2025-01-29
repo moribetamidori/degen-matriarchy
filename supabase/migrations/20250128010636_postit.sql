@@ -46,6 +46,3 @@ create policy "Users can only delete their own notes"
 create policy "Users can insert their own notes"
   on public.post_it_notes for insert
   with check (auth.uid() = user_id);
-
--- Insert default page
-INSERT INTO public.pages (name) VALUES ('1');

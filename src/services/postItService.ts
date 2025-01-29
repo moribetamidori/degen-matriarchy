@@ -84,3 +84,19 @@ export async function updateNotePosition(
 
   if (error) throw error;
 }
+
+export async function updateNoteText(
+  id: string,
+  text: string
+): Promise<void> {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('post_it_notes')
+    .update({ 
+      text,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', id);
+
+  if (error) throw error;
+}

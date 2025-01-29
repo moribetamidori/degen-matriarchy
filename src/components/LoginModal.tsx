@@ -24,27 +24,37 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
       if (isSignUp) {
         await signUp(email, password);
-        
-        const { data: existingUser } = await supabase
-          .from('users')
-          .select()
-          .eq('email', email)
-          .single();
-
-        if (!existingUser) {
-          const user = (await supabase.auth.getUser()).data.user;
-          if (!user?.id) throw new Error("Failed to get user ID");
-          
-          const { error: insertError } = await supabase
-            .from('users')
-            .insert([{ email: email, id: user.id }]);
-
-          if (insertError) throw insertError;
-        }
       } else {
         await signIn(email, password);
       }
-      
+
+      // Check if the user exists in the 'users' table
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user?.id) throw new Error("Failed to get user ID");
+
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select()
+        .eq('id', user.id)
+        .single();
+
+      // If the user does not exist, insert them into the 'users' table
+      if (!existingUser) {
+        const { error: insertError } = await supabase
+          .from('users')
+          .insert({ email: user.email, id: user.id });
+
+        if (insertError) {
+          console.error("Error inserting user:", {
+            message: insertError.message,
+            code: insertError.code,
+            details: insertError.details,
+            hint: insertError.hint,
+          });
+          throw insertError;
+        }
+      }
+
       setEmail("");
       setPassword("");
       onClose();

@@ -30,18 +30,18 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
       // Check if the user exists in the 'users' table
       const user = (await supabase.auth.getUser()).data.user;
-      if (!user?.id) throw new Error("Failed to get user ID");
+      if (!user?.id) throw new Error("Please verify your email in your inbox");
 
       const { data: existingUser } = await supabase
-        .from('users')
+        .from("users")
         .select()
-        .eq('id', user.id)
+        .eq("id", user.id)
         .single();
 
       // If the user does not exist, insert them into the 'users' table
       if (!existingUser) {
         const { error: insertError } = await supabase
-          .from('users')
+          .from("users")
           .insert({ email: user.email, id: user.id });
 
         if (insertError) {
@@ -78,15 +78,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   if (user) {
     return (
       <div className="fixed inset-0 z-50">
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50"
           onClick={onClose}
         />
         <div className="fixed inset-0 flex items-center justify-center">
           <div className="bg-black border border-[#1c41f1] p-8 rounded-lg max-w-md w-full m-4 relative">
-            <h2 className="text-2xl font-bold text-[#1c41f1] mb-6">
-              Account
-            </h2>
+            <h2 className="text-2xl font-bold text-[#1c41f1] mb-6">Account</h2>
             <p className="text-[#1c41f1] mb-4">Signed in as: {user.email}</p>
             <button
               onClick={handleSignOut}
@@ -108,10 +106,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50">
-      <div 
-        className="fixed inset-0 bg-black bg-opacity-50"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose} />
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="bg-black border border-[#1c41f1] p-8 rounded-lg max-w-md w-full m-4 relative">
           <h2 className="text-2xl font-bold text-[#1c41f1] mb-6">
@@ -170,4 +165,4 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export default LoginModal; 
+export default LoginModal;

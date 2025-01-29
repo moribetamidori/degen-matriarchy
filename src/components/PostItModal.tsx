@@ -84,6 +84,7 @@ const PostItModal: React.FC<PostItModalProps> = ({
     setNotes([]);
     setCurrentPageIndex(0);
     setInputText("");
+    setShowLoginMessage(false);
     onClose();
   };
 

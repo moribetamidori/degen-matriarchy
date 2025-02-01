@@ -27,6 +27,9 @@ const topPhrases = [
 
 const Landing: React.FC = () => {
   const mountRef = useRef<HTMLDivElement | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
@@ -38,10 +41,16 @@ const Landing: React.FC = () => {
 
     // Handle resize events
     const handleResize = () => {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight
-      });
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
+      setDimensions({ width, height });
+
+      if (rendererRef.current && cameraRef.current) {
+        rendererRef.current.setSize(width, height);
+        cameraRef.current.aspect = width / height;
+        cameraRef.current.updateProjectionMatrix();
+      }
     };
 
     window.addEventListener('resize', handleResize);
@@ -54,21 +63,31 @@ const Landing: React.FC = () => {
 
     // Scene setup
     const scene = new THREE.Scene();
+    sceneRef.current = scene;
+
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
-    const renderer = new THREE.WebGLRenderer();
+    cameraRef.current = camera;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    rendererRef.current = renderer;
     mount.appendChild(renderer.domElement);
 
     // Starfield
     const starGeometry = new THREE.BufferGeometry();
-    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff });
+    const starMaterial = new THREE.PointsMaterial({ 
+      color: 0xffffff,
+      size: 2,
+      sizeAttenuation: true
+    });
     const starVertices = [];
-    for (let i = 0; i < 10000; i++) {
+    for (let i = 0; i < 15000; i++) {
       const x = THREE.MathUtils.randFloatSpread(2000);
       const y = THREE.MathUtils.randFloatSpread(2000);
       const z = THREE.MathUtils.randFloatSpread(2000);
@@ -80,9 +99,6 @@ const Landing: React.FC = () => {
     );
     const stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
-
-    // Galaxy effect (optional)
-    // Add additional objects or effects here
 
     camera.position.z = 1;
 
@@ -98,6 +114,9 @@ const Landing: React.FC = () => {
     // Cleanup on component unmount
     return () => {
       mount.removeChild(renderer.domElement);
+      renderer.dispose();
+      starGeometry.dispose();
+      starMaterial.dispose();
     };
   }, []);
 

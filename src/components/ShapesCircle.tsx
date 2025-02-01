@@ -7,6 +7,7 @@ import MusicPlayer from "./MusicPlayer";
 import PostItModal from "@/components/PostItModal";
 import LoginModal from "@/components/LoginModal";
 import { useAuth } from "@/contexts/AuthContext";
+import SnailSurfaceModal from "./SnailSurfaceModal";
 
 interface ShapesCircleProps {
   radius: number;
@@ -21,15 +22,16 @@ const ShapesCircle: React.FC<ShapesCircleProps> = ({
 }) => {
   const { user } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isSnailSurfaceModalOpen, setIsSnailSurfaceModalOpen] = useState(false);
 
   const shapes = [
     {
       type: "tetrahedron" as const,
       label: user ? "Logged in" : "Login",
       content: (
-        <LoginModal 
-          isOpen={isLoginModalOpen} 
-          onClose={() => setIsLoginModalOpen(false)} 
+        <LoginModal
+          isOpen={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
         />
       ),
       onClick: () => setIsLoginModalOpen(true),
@@ -41,22 +43,23 @@ const ShapesCircle: React.FC<ShapesCircleProps> = ({
     },
     {
       type: "octahedron" as const,
-      label: "Octahedron",
-      content: <div className="text-[#1c41f1]">8 Faces</div>,
+      label: "Monolith",
+      content: (
+        <SnailSurfaceModal
+          isOpen={isSnailSurfaceModalOpen}
+          onClose={() => setIsSnailSurfaceModalOpen(false)}
+        />
+      ),
+      onClick: () => setIsSnailSurfaceModalOpen(true),
     },
     {
       type: "dodecahedron" as const,
-      label: "Dodecahedron",
-      content: <div className="text-[#1c41f1]">12 Faces</div>,
-    },
-    {
-      type: "icosahedron" as const,
       label: "Post-Its",
       content: (
-        <PostItModal 
-          isOpen={true} 
-          onClose={() => {}} 
-          userId={user?.id ?? "defaultUserId"} 
+        <PostItModal
+          isOpen={true}
+          onClose={() => {}}
+          userId={user?.id ?? "defaultUserId"}
         />
       ),
     },

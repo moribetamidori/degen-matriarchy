@@ -5,6 +5,7 @@ import RotatingShape from "./RotatingShape";
 import Modal from "@/components/Modal";
 import PostItModal from "@/components/PostItModal"
 import LoginModal from "@/components/LoginModal";
+import SnailSurfaceModal from "./SnailSurfaceModal";
 
 interface ShapeProps {
   type:
@@ -24,23 +25,15 @@ const Shape: React.FC<ShapeProps> = ({ type, position, label, content }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const renderContent = () => {
-    // Special handling for PostItModal
-    if (React.isValidElement(content) && content.type === PostItModal) {
-      return React.cloneElement(content, {
-        isOpen: isModalOpen,
-        onClose: () => setIsModalOpen(false),
-      });
+    if (React.isValidElement(content)) {
+      if (content.type === PostItModal || content.type === LoginModal || content.type === SnailSurfaceModal) {
+        return React.cloneElement(content, {
+          isOpen: isModalOpen,
+          onClose: () => setIsModalOpen(false),
+        });
+      }
     }
 
-    // Special handling for LoginModal
-    if (React.isValidElement(content) && content.type === LoginModal) {
-      return React.cloneElement(content, {
-        isOpen: isModalOpen,
-        onClose: () => setIsModalOpen(false),
-      });
-    }
-
-    // Regular modal content
     return (
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         {content}

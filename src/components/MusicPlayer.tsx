@@ -9,14 +9,15 @@ interface Song {
 }
 
 const songs: Song[] = [
-  { title: "Chicane", artist: "Swarms", file: "/music/chicane.mp3" },
-  { title: "Derecho", artist: "Photay", file: "/music/derecho.mp3" },
+  { title: "Chicane", artist: "Swarms", file: "/music/1.mp3" },
+  { title: "Derecho", artist: "Photay", file: "/music/2.mp3" },
   {
     title: "Hidden Qi",
     artist: "Mindy Meng Wang",
-    file: "/music/hidden-qi.mp3",
+    file: "/music/3.mp3",
   },
-  // Add more songs as needed
+  { title: "Azukiiro No Kaori", artist: "Susumu Yokota", file: "/music/4.mp3" },
+  { title: "Reality Picture", artist: "Patrick Holland", file: "/music/5.mp3" },
 ];
 
 const MusicPlayer: React.FC = () => {

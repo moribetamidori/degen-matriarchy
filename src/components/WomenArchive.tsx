@@ -108,7 +108,7 @@ const WomenArchive: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="h-full flex flex-col">
+        <div className="h-full flex flex-col p-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex gap-2 overflow-x-auto flex-1 mr-4">
               {allTags.map((tag) => (

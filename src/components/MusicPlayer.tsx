@@ -25,7 +25,7 @@ const MusicPlayer: React.FC = () => {
 
   return (
     <div className="p-4 border border-[#1c41f1] rounded-lg">
-      <div className="mb-4">
+      <div className="mb-4 mt-8">
         <button
           onClick={playRandomSong}
           className="w-full py-2 border border-[#1c41f1] rounded-lg text-[#1c41f1] hover:bg-[#1c41f1] hover:text-black transition-colors"

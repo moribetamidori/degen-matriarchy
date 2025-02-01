@@ -39,7 +39,7 @@ const ShapesCircle: React.FC<ShapesCircleProps> = ({
     {
       type: "cube" as const,
       label: "Cube",
-      content: <div className="text-[#1c41f1]">6 Faces</div>,
+      content: <div className="text-[#1c41f1] p-4">6 Faces</div>,
     },
     {
       type: "octahedron" as const,

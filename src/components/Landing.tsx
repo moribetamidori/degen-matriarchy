@@ -149,7 +149,13 @@ const Landing: React.FC = () => {
           centerX={dimensions.width / 2} 
           centerY={dimensions.height / 2} 
         />
-        <Image src="/dm.png" alt="Centered Image" width={180} height={180} />
+        <Image 
+          src="/dm.png" 
+          alt="Centered Image" 
+          width={dimensions.width < 640 ? 60 : 180} 
+          height={dimensions.width < 640 ? 60 : 180} 
+          className="w-auto h-auto"
+        />
       </div>
       <div className="moving-band bottom-band">
         <div className="scroll reverse">

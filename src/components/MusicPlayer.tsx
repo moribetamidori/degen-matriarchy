@@ -21,7 +21,7 @@ const songs: Song[] = [
 ];
 
 const MusicPlayer: React.FC = () => {
-  const { currentSong, isPlaying, playSong, playRandomSong } = useMusicPlayer();
+  const { currentSong, isPlaying, playSong } = useMusicPlayer();
 
   const handlePlayRandomSong = () => {
     const randomIndex = Math.floor(Math.random() * songs.length);

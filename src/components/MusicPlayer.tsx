@@ -23,11 +23,17 @@ const songs: Song[] = [
 const MusicPlayer: React.FC = () => {
   const { currentSong, isPlaying, playSong, playRandomSong } = useMusicPlayer();
 
+  const handlePlayRandomSong = () => {
+    const randomIndex = Math.floor(Math.random() * songs.length);
+    const randomSong = songs[randomIndex];
+    playSong(randomSong);
+  };
+
   return (
     <div className="p-4 border border-[#1c41f1] rounded-lg">
       <div className="mb-4 mt-8">
         <button
-          onClick={playRandomSong}
+          onClick={handlePlayRandomSong}
           className="w-full py-2 border border-[#1c41f1] rounded-lg text-[#1c41f1] hover:bg-[#1c41f1] hover:text-black transition-colors"
         >
           I&apos;m feeling vibey
